@@ -1,8 +1,5 @@
 # Akamai::Client::Ruby
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/akamai/client/ruby`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This ruby library is for severarl akamai services.  
 
 ## Installation
 
@@ -21,8 +18,38 @@ Or install it yourself as:
     $ gem install akamai-client-ruby
 
 ## Usage
+### PAPI
+When you want to call PAPI API, you can do it by executing like following code.  
+```
+require "akamai/client"
 
-TODO: Write usage instructions here
+# Initialize papi client
+client = Akamai::Client::Papi.new(
+  host: "akab-xxxxxx-yyyyy.luna.akamaiapis.net",
+  client_token: "akab-xxxx-yyyyy",
+  client_secret: "XXXX1111222",
+  access_token: "akab-xxxxx-yyyyy"
+)
+
+# List groups
+client.list_groups
+
+# List properties
+client.list_properties(
+  contract_id,
+  group_id
+)
+
+# Get Rule tree
+client.get_rule_tree(
+  property_id,
+  version,
+  contract_id,
+  group_id
+)
+```
+
+Regarding to detail of PAPI API provided by Akamai, please refer https://developer.akamai.com/api/luna/papi/resources.html.
 
 ## Development
 
