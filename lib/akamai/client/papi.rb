@@ -40,10 +40,10 @@ module Akamai
         )
       end
 
-      def get_rule_tree(property_id, version, contract_id, group_id, options = {})
+      def get_rule_tree(property_id, version, options = {})
         path = build_full_path(
           "properties/#{property_id}/versions/#{version}/rules",
-          {contract_id: contract_id, group_id: group_id}.merge(options)
+          options
         )
         response = client.get(path)
         transform_to_snakecase(
