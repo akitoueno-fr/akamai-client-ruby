@@ -58,7 +58,7 @@ module Akamai
             break arr
           end
         else
-          transform_hash(element)
+          transform_hash(data)
         end
       end
 
