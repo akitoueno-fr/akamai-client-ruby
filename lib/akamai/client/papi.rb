@@ -20,7 +20,7 @@ module Akamai
       end
 
       def list_cp_codes(contract_id, group_id)
-        get(:cpcodes, ontract_id: contract_id, group_id: group_id)
+        get(:cpcodes, contract_id: contract_id, group_id: group_id)
       end
 
       def list_properties(contract_id, group_id)
