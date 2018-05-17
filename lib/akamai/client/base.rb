@@ -13,19 +13,12 @@ module Akamai
         )
       end
 
-      %i(get head).each do |method|
+      %i(get head delete).each do |method|
         define_method(method) do |resource_name, query_params = {}, headers = {}|
           path = build_full_path(resource_name, query_params)
           response = client.send(method, path, headers)
-          return response.body if :head == method
-          item_key = if /^[a-z1-9]+-[a-z1-9]+$/ =~ resource_name.to_s.split("/")[0]
-                       resource_name.to_s.split("/")[0].gsub(/-/, "_").camelize(:lower)
-                     else
-                       resource_name.to_s.split("/")[0]
-                     end
-          transform_to_snakecase(
-            response.body[item_key][:items]
-          )
+          return response.body unless :get == method
+          build_resources(resource_name, response.body)
         end
       end
 
@@ -47,6 +40,32 @@ module Akamai
         end
         path.query = params.present? ? params.to_param : nil
         path.to_s
+      end
+
+      def build_resources(resource_name, body)
+        if /Array/ =~ body.class.name
+          [].tap do |result|
+            body.each do |resource|
+              result << transform_to_snakecase(resource)
+            end
+            break result
+          end
+        else
+          items =
+            if body.key?(:items)
+              body[:items]
+            else
+              item_key = if /^[a-z1-9]+-[a-z1-9]+$/ =~ resource_name.to_s.split("/")[0]
+                           resource_name.to_s.split("/")[0].gsub(/-/, "_").camelize(:lower)
+                         else
+                           resource_name.to_s.split("/")[0]
+                         end
+              body[item_key][:items]
+            end
+          transform_to_snakecase(
+            items
+          )
+        end
       end
 
       def transform_to_snakecase(data)
