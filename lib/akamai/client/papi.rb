@@ -37,6 +37,17 @@ module Akamai
         )
       end
 
+      def list_hostnames(property_id, property_version, options = {})
+        path = build_full_path(
+          "properties/#{property_id}/versions/#{property_version}/hostnames",
+          options
+        )
+        response = client.get(path)
+        transform_to_snakecase(
+          response.body[:hostnames][:items]
+        )
+      end
+
       def get_property(property_id, contract_id, group_id)
         get(
           "properties/#{property_id}", contract_id: contract_id, group_id: group_id
