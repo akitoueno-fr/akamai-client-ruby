@@ -15,7 +15,7 @@ module Akamai
 
       %i(get head).each do |method|
         define_method(method) do |resource_name, query_params = {}, headers = {}|
-          path = build_full_path(resource_name, query_params)
+          path = build_full_path(resource_name.to_s.downcase, query_params)
           response = client.send(method, path, headers)
           return response.body if :head == method
           item_key = if /^[a-z1-9]+-[a-z1-9]+$/ =~ resource_name.to_s.split("/")[0]

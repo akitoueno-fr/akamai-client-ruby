@@ -48,6 +48,10 @@ module Akamai
         )
       end
 
+      def list_edge_hostnames(contract_id, group_id, options = {})
+        get(:edgeHostnames, {contract_id: contract_id, group_id: group_id}.merge(options))
+      end
+
       def get_property(property_id, contract_id, group_id)
         get(
           "properties/#{property_id}", contract_id: contract_id, group_id: group_id
