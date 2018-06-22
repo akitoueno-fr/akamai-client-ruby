@@ -92,6 +92,17 @@ module Akamai
         client.get(path).body.to_hash["versionLink"].split("/")[-1].to_i
       end
 
+      def create_property(attrs, options = {})
+        path = build_full_path(
+          "properties",
+          contractId: attrs[:contract_id], groupId: attrs[:group_id]
+        )
+        body = {
+          productId: attrs[:product_id], propertyName: attrs[:property_name]
+        }.merge(options).to_json
+        client.post(path, body).body.to_hash["propertyLink"]
+      end
+
       def create_property_version(property_id, from_version, from_etag, options = {})
         path = build_full_path(
           "properties/#{property_id}/versions",
